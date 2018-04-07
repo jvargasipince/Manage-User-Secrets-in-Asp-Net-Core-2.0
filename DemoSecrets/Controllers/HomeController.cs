@@ -5,13 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DemoSecrets.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace DemoSecrets.Controllers
 {
     public class HomeController : Controller
     {
+        public IConfiguration Configuration { get; set; }
+
+        public HomeController(IConfiguration config)
+        {
+            Configuration = config;
+        }
+
         public IActionResult Index()
         {
+            ViewData["strPlanillaCnx"] = Configuration.GetConnectionString("strPlanillaCnx");
+            ViewData["FaceApi"] = Configuration.GetValue<string>("APIsKeys:FaceApi");
+            ViewData["AzureApi"] = Configuration.GetValue<string>("APIsKeys:AzureApi");
             return View();
         }
 
